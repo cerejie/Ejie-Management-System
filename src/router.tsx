@@ -12,7 +12,7 @@ const rootRoute = createRootRoute({
 });
 
 function requireGuest() {
-  if (useAuthStore.getState().status === "signed-in") {
+  if (useAuthStore.getState().status === "signed-in" ) {
     throw redirect({ to: "/" });
   }
 }
