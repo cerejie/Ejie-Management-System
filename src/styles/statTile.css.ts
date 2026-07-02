@@ -1,5 +1,6 @@
 import { style } from "@vanilla-extract/css";
 import { vars } from "@/styles/theme.css";
+import { mobileDown } from "@/styles/breakpoints.css";
 
 export const tile = style({
   background: vars.color.surface,
@@ -11,6 +12,15 @@ export const tile = style({
   alignItems: "flex-start",
   gap: vars.space.md,
   height: "100%",
+  "@media": {
+    [mobileDown]: {
+      flexDirection: "column",
+      alignItems: "center",
+      textAlign: "center",
+      gap: vars.space.xs,
+      padding: vars.space.sm,
+    },
+  },
 });
 
 export const iconBadge = style({
@@ -22,6 +32,13 @@ export const iconBadge = style({
   alignItems: "center",
   justifyContent: "center",
   fontSize: 18,
+  "@media": {
+    [mobileDown]: {
+      width: 28,
+      height: 28,
+      fontSize: 13,
+    },
+  },
 });
 
 export const body = style({
@@ -33,6 +50,15 @@ export const label = style({
   color: vars.color.textMuted,
   fontWeight: 500,
   marginBottom: 6,
+  "@media": {
+    [mobileDown]: {
+      fontSize: 11,
+      marginBottom: 2,
+      whiteSpace: "nowrap",
+      overflow: "hidden",
+      textOverflow: "ellipsis",
+    },
+  },
 });
 
 export const value = style({
@@ -40,4 +66,9 @@ export const value = style({
   fontWeight: 700,
   letterSpacing: "-0.01em",
   lineHeight: 1.2,
+  "@media": {
+    [mobileDown]: {
+      fontSize: 15,
+    },
+  },
 });

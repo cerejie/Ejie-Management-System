@@ -1,8 +1,14 @@
 import { style } from "@vanilla-extract/css";
 import { vars } from "@/styles/theme.css";
+import { mobileDown, tabletDown } from "@/styles/breakpoints.css";
 
 export const sider = style({
   borderRight: `1px solid ${vars.color.sidebarBorder}`,
+  "@media": {
+    [mobileDown]: {
+      display: "none",
+    },
+  },
 });
 
 export const sidebarBrand = style({
@@ -65,8 +71,11 @@ export const headerTitle = style({
 export const collapseTrigger = style({
   display: "none",
   "@media": {
-    "screen and (max-width: 991px)": {
+    [tabletDown]: {
       display: "inline-flex",
+    },
+    [mobileDown]: {
+      display: "none",
     },
   },
 });
@@ -111,4 +120,9 @@ export const userRole = style({
 
 export const contentOuter = style({
   minHeight: "calc(100vh - 64px)",
+  "@media": {
+    [mobileDown]: {
+      paddingBottom: "calc(64px + env(safe-area-inset-bottom))",
+    },
+  },
 });
