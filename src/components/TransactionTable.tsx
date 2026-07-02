@@ -1,5 +1,5 @@
-import { Table, Tag, Space, Button, Popconfirm } from "antd";
-import { EditOutlined, DeleteOutlined } from "@ant-design/icons";
+import { Table, Tag, Space, Button, Popconfirm, Tooltip, Empty } from "antd";
+import { EditOutlined, DeleteOutlined, InboxOutlined } from "@ant-design/icons";
 import dayjs from "dayjs";
 import type { Transaction, TransactionWithAuthor } from "@/types/database";
 import { positiveAmount, negativeAmount } from "@/styles/layout.css";
@@ -26,12 +26,23 @@ export function TransactionTable<T extends Row>({ data, loading, onEdit, onDelet
       rowKey="id"
       loading={loading}
       dataSource={data}
-      pagination={{ pageSize: 10 }}
+      pagination={{ pageSize: 10, showTotal: (total) => `${total} entries` }}
+      scroll={{ x: 720 }}
+      sticky
+      locale={{
+        emptyText: (
+          <Empty
+            image={<InboxOutlined style={{ fontSize: 40, color: "#D8DAE5" }} />}
+            description="No entries yet"
+            style={{ padding: "32px 0" }}
+          />
+        ),
+      }}
       columns={[
         {
           title: "Date",
           dataIndex: "created_at",
-          width: 160,
+          width: 170,
           render: (value: string) => dayjs(value).format("MMM D, YYYY h:mm A"),
         },
         ...(showAuthor
@@ -39,6 +50,7 @@ export function TransactionTable<T extends Row>({ data, loading, onEdit, onDelet
               {
                 title: "Recorded by",
                 key: "author",
+                width: 140,
                 render: (_: unknown, row: T) => (hasAuthor(row) ? row.profiles?.username ?? "—" : "—"),
               },
             ]
@@ -48,7 +60,7 @@ export function TransactionTable<T extends Row>({ data, loading, onEdit, onDelet
           dataIndex: "type",
           width: 120,
           render: (value: Transaction["type"]) => (
-            <Tag color={value === "deposit" ? "green" : "red"}>
+            <Tag color={value === "deposit" ? "green" : "red"} style={{ borderRadius: 6 }}>
               {value === "deposit" ? "Money In" : "Money Out"}
             </Tag>
           ),
@@ -67,6 +79,7 @@ export function TransactionTable<T extends Row>({ data, loading, onEdit, onDelet
         {
           title: "Note",
           dataIndex: "note",
+          ellipsis: true,
           render: (value: string | null) => value || "—",
         },
         ...(showActions
@@ -74,13 +87,20 @@ export function TransactionTable<T extends Row>({ data, loading, onEdit, onDelet
               {
                 title: "Actions",
                 key: "actions",
-                width: 120,
+                width: 100,
+                fixed: "right" as const,
                 render: (_: unknown, row: T) => (
-                  <Space>
-                    {onEdit && <Button size="small" icon={<EditOutlined />} onClick={() => onEdit(row)} />}
+                  <Space size={4}>
+                    {onEdit && (
+                      <Tooltip title="Edit">
+                        <Button size="small" type="text" icon={<EditOutlined />} onClick={() => onEdit(row)} />
+                      </Tooltip>
+                    )}
                     {onDelete && (
                       <Popconfirm title="Delete this entry?" onConfirm={() => onDelete(row)}>
-                        <Button size="small" danger icon={<DeleteOutlined />} />
+                        <Tooltip title="Delete">
+                          <Button size="small" type="text" danger icon={<DeleteOutlined />} />
+                        </Tooltip>
                       </Popconfirm>
                     )}
                   </Space>

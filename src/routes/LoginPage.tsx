@@ -7,7 +7,7 @@ import { supabase } from "@/lib/supabase";
 import { useAuthStore } from "@/store/auth-store";
 import { usernameToEmail } from "@/lib/auth-helpers";
 import { loginSchema, type LoginFormValues } from "@/schemas/auth-schema";
-import { authScreen, authCard } from "@/styles/layout.css";
+import { authScreen, authBrand, authBrandMark, authCard, authFooterText } from "@/styles/layout.css";
 
 export function LoginPage() {
   const navigate = useNavigate();
@@ -51,14 +51,21 @@ export function LoginPage() {
 
   return (
     <div className={authScreen}>
+      <div className={authBrand}>
+        <div className={authBrandMark}>EJ</div>
+          Ejie Layouts Monitoring
+      </div>
       <div className={authCard}>
         <Typography.Title level={3} style={{ marginTop: 0 }}>
-          Sign in
+          Welcome back
         </Typography.Title>
+        <Typography.Paragraph type="secondary" style={{ marginTop: -8, marginBottom: 24 }}>
+          Sign in to continue to your account.
+        </Typography.Paragraph>
 
-        {error && <Alert type="error" title={error} style={{ marginBottom: 16 }} />}
+        {error && <Alert type="error" title={error} style={{ marginBottom: 16 }} showIcon />}
 
-        <Form layout="vertical" onFinish={handleSubmit(onSubmit)}>
+        <Form layout="vertical" requiredMark="optional" onFinish={handleSubmit(onSubmit)}>
           <Form.Item label="Username" validateStatus={errors.username ? "error" : ""} help={errors.username?.message}>
             <Controller control={control} name="username" render={({ field }) => <Input {...field} autoComplete="username" />} />
           </Form.Item>
@@ -76,9 +83,9 @@ export function LoginPage() {
           </Button>
         </Form>
 
-        <Typography.Paragraph style={{ marginTop: 16, textAlign: "center" }}>
+        <p className={authFooterText}>
           No account yet? <Link to="/register">Register</Link>
-        </Typography.Paragraph>
+        </p>
       </div>
     </div>
   );

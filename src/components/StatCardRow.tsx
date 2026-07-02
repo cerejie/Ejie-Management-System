@@ -1,7 +1,35 @@
-import { Row, Col, Statistic } from "antd";
+import { Row, Col } from "antd";
 import { ArrowUpOutlined, ArrowDownOutlined, WalletOutlined } from "@ant-design/icons";
-import { card } from "@/styles/layout.css";
 import { vars } from "@/styles/theme.css";
+import { tile, iconBadge, body, label, value } from "@/styles/statTile.css";
+
+function StatTile({
+  icon,
+  iconColor,
+  iconBg,
+  label: labelText,
+  amount,
+}: {
+  icon: React.ReactNode;
+  iconColor: string;
+  iconBg: string;
+  label: string;
+  amount: number;
+}) {
+  return (
+    <div className={tile}>
+      <div className={iconBadge} style={{ color: iconColor, background: iconBg }}>
+        {icon}
+      </div>
+      <div className={body}>
+        <div className={label}>{labelText}</div>
+        <div className={value} style={{ color: amount < 0 ? vars.color.negative : vars.color.text }}>
+          {amount.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+        </div>
+      </div>
+    </div>
+  );
+}
 
 export function StatCardRow({
   balanceLabel,
@@ -15,42 +43,33 @@ export function StatCardRow({
   net: number;
 }) {
   return (
-    <Row gutter={16}>
+    <Row gutter={[16, 16]}>
       <Col xs={24} sm={8}>
-        <div className={card}>
-          <Statistic
-            title={balanceLabel}
-            value={net}
-            precision={2}
-            prefix={<WalletOutlined />}
-            valueStyle={{
-              color: net >= 0 ? vars.color.positive : vars.color.negative,
-              fontWeight: 600,
-            }}
-          />
-        </div>
+        <StatTile
+          icon={<WalletOutlined />}
+          iconColor={vars.color.brand}
+          iconBg={vars.color.brandSoft}
+          label={balanceLabel}
+          amount={net}
+        />
       </Col>
       <Col xs={24} sm={8}>
-        <div className={card}>
-          <Statistic
-            title="Total money in"
-            value={totalIn}
-            precision={2}
-            prefix={<ArrowUpOutlined />}
-            valueStyle={{ color: vars.color.positive, fontWeight: 600 }}
-          />
-        </div>
+        <StatTile
+          icon={<ArrowUpOutlined />}
+          iconColor={vars.color.positive}
+          iconBg={vars.color.positiveSoft}
+          label="Total money in"
+          amount={totalIn}
+        />
       </Col>
       <Col xs={24} sm={8}>
-        <div className={card}>
-          <Statistic
-            title="Total money out"
-            value={totalOut}
-            precision={2}
-            prefix={<ArrowDownOutlined />}
-            valueStyle={{ color: vars.color.negative, fontWeight: 600 }}
-          />
-        </div>
+        <StatTile
+          icon={<ArrowDownOutlined />}
+          iconColor={vars.color.negative}
+          iconBg={vars.color.negativeSoft}
+          label="Total money out"
+          amount={totalOut}
+        />
       </Col>
     </Row>
   );

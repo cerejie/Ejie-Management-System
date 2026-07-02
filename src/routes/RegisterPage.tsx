@@ -1,14 +1,14 @@
 import { useState } from "react";
 import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Button, Form, Input, Typography, Alert } from "antd";
+import { Button, Form, Input, Typography, Alert, Result } from "antd";
 import { Link, useNavigate } from "@tanstack/react-router";
 import { supabase } from "@/lib/supabase";
 import { useAuthStore } from "@/store/auth-store";
 import { usernameToEmail } from "@/lib/auth-helpers";
 import { registerEmployee } from "@/lib/api";
 import { registerSchema, type RegisterFormValues } from "@/schemas/auth-schema";
-import { authScreen, authCard } from "@/styles/layout.css";
+import { authScreen, authBrand, authBrandMark, authCard, authFooterText } from "@/styles/layout.css";
 
 export function RegisterPage() {
   const navigate = useNavigate();
@@ -62,14 +62,22 @@ export function RegisterPage() {
   if (registeredUsername) {
     return (
       <div className={authScreen}>
+        <div className={authBrand}>
+          <div className={authBrandMark}>EJ</div>
+          Ejie Layouts Monitoring
+        </div>
         <div className={authCard}>
-          <Typography.Title level={3} style={{ marginTop: 0 }}>
-            Account created
-          </Typography.Title>
-          <Typography.Paragraph>
-            Your account (<strong>{registeredUsername}</strong>) is waiting for an admin to
-            approve it. You'll be able to sign in once that happens.
-          </Typography.Paragraph>
+          <Result
+            status="success"
+            title="Account created"
+            subTitle={
+              <>
+                Your account (<strong>{registeredUsername}</strong>) is waiting for an admin to
+                approve it. You'll be able to sign in once that happens.
+              </>
+            }
+            style={{ padding: "24px 0" }}
+          />
           <Link to="/login">
             <Button type="primary" block>
               Go to sign in
@@ -82,14 +90,21 @@ export function RegisterPage() {
 
   return (
     <div className={authScreen}>
+      <div className={authBrand}>
+        <div className={authBrandMark}>EJ</div>
+          Ejie Layouts Monitoring
+      </div>
       <div className={authCard}>
         <Typography.Title level={3} style={{ marginTop: 0 }}>
           Create account
         </Typography.Title>
+        <Typography.Paragraph type="secondary" style={{ marginTop: -8, marginBottom: 24 }}>
+          Register to request access to the ledger.
+        </Typography.Paragraph>
 
-        {error && <Alert type="error" title={error} style={{ marginBottom: 16 }} />}
+        {error && <Alert type="error" title={error} style={{ marginBottom: 16 }} showIcon />}
 
-        <Form layout="vertical" onFinish={handleSubmit(onSubmit)}>
+        <Form layout="vertical" requiredMark="optional" onFinish={handleSubmit(onSubmit)}>
           <Form.Item label="Name" validateStatus={errors.fullName ? "error" : ""} help={errors.fullName?.message}>
             <Controller control={control} name="fullName" render={({ field }) => <Input {...field} autoComplete="name" />} />
           </Form.Item>
@@ -111,9 +126,9 @@ export function RegisterPage() {
           </Button>
         </Form>
 
-        <Typography.Paragraph style={{ marginTop: 16, textAlign: "center" }}>
+        <p className={authFooterText}>
           Already have an account? <Link to="/login">Sign in</Link>
-        </Typography.Paragraph>
+        </p>
       </div>
     </div>
   );
