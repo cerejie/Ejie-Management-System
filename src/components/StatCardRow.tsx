@@ -44,7 +44,7 @@ export function StatCardRow({
 }) {
   return (
     <Row gutter={[16, 16]}>
-      <Col xs={24} sm={8}>
+      <Col xs={8} sm={8}>
         <StatTile
           icon={<WalletOutlined />}
           iconColor={vars.color.brand}
@@ -53,7 +53,7 @@ export function StatCardRow({
           amount={net}
         />
       </Col>
-      <Col xs={24} sm={8}>
+      <Col xs={8} sm={8}>
         <StatTile
           icon={<ArrowUpOutlined />}
           iconColor={vars.color.positive}
@@ -62,7 +62,7 @@ export function StatCardRow({
           amount={totalIn}
         />
       </Col>
-      <Col xs={24} sm={8}>
+      <Col xs={8} sm={8}>
         <StatTile
           icon={<ArrowDownOutlined />}
           iconColor={vars.color.negative}

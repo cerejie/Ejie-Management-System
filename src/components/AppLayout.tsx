@@ -3,16 +3,14 @@ import { Layout, Menu, Avatar, Dropdown, Button, Tag } from "antd";
 import type { MenuProps } from "antd";
 import {
   LogoutOutlined,
-  WalletOutlined,
-  TeamOutlined,
-  DashboardOutlined,
-  FileTextOutlined,
   MenuFoldOutlined,
   MenuUnfoldOutlined,
   DownOutlined,
 } from "@ant-design/icons";
 import { Link, useNavigate, useRouterState } from "@tanstack/react-router";
 import { useAuthStore } from "@/store/auth-store";
+import { getNavItems } from "@/lib/nav-items";
+import { BottomNav } from "@/components/BottomNav";
 import {
   sider,
   sidebarBrand,
@@ -47,15 +45,12 @@ export function AppLayout({ children }: { children: React.ReactNode }) {
 
   const isAdmin = profile?.role === "admin";
 
-  const items = isAdmin
-    ? [
-        { key: "/admin", icon: <DashboardOutlined />, label: <Link to="/admin">Dashboard</Link> },
-        { key: "/admin/employees", icon: <TeamOutlined />, label: <Link to="/admin/employees">Employees</Link> },
-        { key: "/admin/logs", icon: <FileTextOutlined />, label: <Link to="/admin/logs">Logs</Link> },
-      ]
-    : [
-        { key: "/transactions", icon: <WalletOutlined />, label: <Link to="/transactions">My Ledger</Link> },
-      ];
+  const navItems = getNavItems(isAdmin);
+  const items = navItems.map((navItem) => ({
+    key: navItem.key,
+    icon: navItem.icon,
+    label: <Link to={navItem.key}>{navItem.label}</Link>,
+  }));
 
   async function handleSignOut() {
     await signOut();
@@ -134,6 +129,7 @@ export function AppLayout({ children }: { children: React.ReactNode }) {
         </Header>
         <Content className={contentOuter}>{children}</Content>
       </Layout>
+      <BottomNav items={navItems} pathname={pathname} />
     </Layout>
   );
 }

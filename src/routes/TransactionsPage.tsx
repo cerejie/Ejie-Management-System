@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { App, Typography, Row, Col, Modal, DatePicker } from "antd";
+import { PlusOutlined } from "@ant-design/icons";
 import dayjs, { type Dayjs } from "dayjs";
 import { AppLayout } from "@/components/AppLayout";
 import { TransactionForm } from "@/components/TransactionForm";
@@ -8,7 +9,7 @@ import { StatCardRow } from "@/components/StatCardRow";
 import { useAuthStore } from "@/store/auth-store";
 import { computeTotals, createTransaction, listOwnTransactions, updateTransaction } from "@/lib/api";
 import type { Transaction } from "@/types/database";
-import { page, pageHeader, pageTitle, pageSubtitle, card } from "@/styles/layout.css";
+import { page, pageHeader, pageTitle, pageSubtitle, card, desktopOnly, fab, filterBarCentered, filterControl } from "@/styles/layout.css";
 import type { TransactionFormValues } from "@/schemas/transaction-schema";
 
 const { RangePicker } = DatePicker;
@@ -22,6 +23,7 @@ export function TransactionsPage() {
   const [editing, setEditing] = useState<Transaction | null>(null);
   const [saving, setSaving] = useState(false);
   const [dateRange, setDateRange] = useState<[Dayjs, Dayjs] | null>(null);
+  const [addOpen, setAddOpen] = useState(false);
 
   const load = useCallback(async () => {
     if (!profile) return;
@@ -57,6 +59,7 @@ export function TransactionsPage() {
     try {
       await createTransaction({ ...values, createdBy: profile.id });
       message.success("Entry recorded");
+      setAddOpen(false);
       await load();
     } catch (err) {
       message.error(err instanceof Error ? err.message : "Failed to save entry");
@@ -95,7 +98,7 @@ export function TransactionsPage() {
         <StatCardRow balanceLabel="My balance" totalIn={totals.totalIn} totalOut={totals.totalOut} net={totals.net} />
 
         <Row gutter={[24, 24]} style={{ marginTop: 24 }}>
-          <Col xs={24} md={8}>
+          <Col xs={24} md={8} className={desktopOnly}>
             <div className={card} style={{ marginBottom: 0 }}>
               <Typography.Title level={5} style={{ marginTop: 0 }}>
                 Record an entry
@@ -104,8 +107,9 @@ export function TransactionsPage() {
             </div>
           </Col>
           <Col xs={24} md={16}>
-            <div style={{ marginBottom: 16 }}>
+            <div className={filterBarCentered}>
               <RangePicker
+                className={filterControl}
                 value={dateRange}
                 onChange={(value) => setDateRange(value && value[0] && value[1] ? [value[0], value[1]] : null)}
                 allowClear
@@ -115,6 +119,14 @@ export function TransactionsPage() {
           </Col>
         </Row>
       </div>
+
+      <button className={fab} onClick={() => setAddOpen(true)} aria-label="Record an entry">
+        <PlusOutlined />
+      </button>
+
+      <Modal title="Record an entry" open={addOpen} onCancel={() => setAddOpen(false)} footer={null} destroyOnHidden>
+        <TransactionForm submitLabel="Add entry" submitting={submitting} onSubmit={handleSubmit} />
+      </Modal>
 
       <Modal title="Edit entry" open={Boolean(editing)} onCancel={() => setEditing(null)} footer={null} destroyOnHidden>
         {editing && (

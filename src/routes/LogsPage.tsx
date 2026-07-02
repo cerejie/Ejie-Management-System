@@ -3,9 +3,10 @@ import { App, Typography, Table, Tag, Input, Empty } from "antd";
 import { SearchOutlined, FileTextOutlined } from "@ant-design/icons";
 import dayjs from "dayjs";
 import { AppLayout } from "@/components/AppLayout";
+import { LogCardList } from "@/components/LogCardList";
 import { listActivityLogs } from "@/lib/api";
 import type { ActivityLogWithActor } from "@/types/database";
-import { page, pageHeader, pageTitle, pageSubtitle, toolbar, surfacePanel } from "@/styles/layout.css";
+import { page, pageHeader, pageTitle, pageSubtitle, toolbar, toolbarField, surfacePanel, desktopOnly } from "@/styles/layout.css";
 
 const actionColors: Record<string, string> = {
   "transaction.create": "green",
@@ -90,11 +91,12 @@ export function LogsPage() {
             prefix={<SearchOutlined style={{ color: "#9CA3AF" }} />}
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            style={{ maxWidth: 280 }}
+            className={toolbarField}
           />
         </div>
 
         <div className={surfacePanel}>
+          <div className={desktopOnly}>
           <Table<ActivityLogWithActor>
             rowKey="id"
             loading={loading}
@@ -141,6 +143,8 @@ export function LogsPage() {
               },
             ]}
           />
+          </div>
+          <LogCardList logs={filtered} loading={loading} actionColors={actionColors} describe={describe} />
         </div>
       </div>
     </AppLayout>

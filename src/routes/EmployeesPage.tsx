@@ -6,6 +6,7 @@ import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import dayjs from "dayjs";
 import { AppLayout } from "@/components/AppLayout";
+import { EmployeeCardList } from "@/components/EmployeeCardList";
 import { useAuthStore } from "@/store/auth-store";
 import {
   approveProfile,
@@ -16,7 +17,7 @@ import {
 } from "@/lib/api";
 import type { Profile } from "@/types/database";
 import { createEmployeeSchema, type CreateEmployeeFormValues } from "@/schemas/auth-schema";
-import { page, pageHeader, pageTitle, pageSubtitle, toolbar, surfacePanel } from "@/styles/layout.css";
+import { page, pageHeader, pageTitle, pageSubtitle, toolbar, toolbarField, surfacePanel, desktopOnly } from "@/styles/layout.css";
 
 function AddEmployeeModal({ open, onClose, onCreated }: { open: boolean; onClose: () => void; onCreated: () => void }) {
   const { message } = App.useApp();
@@ -202,11 +203,12 @@ export function EmployeesPage() {
             prefix={<SearchOutlined style={{ color: "#9CA3AF" }} />}
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            style={{ maxWidth: 280 }}
+            className={toolbarField}
           />
         </div>
 
         <div className={surfacePanel}>
+          <div className={desktopOnly}>
           <Table<Profile>
             rowKey="id"
             loading={loading}
@@ -285,6 +287,15 @@ export function EmployeesPage() {
                   ),
               },
             ]}
+          />
+          </div>
+          <EmployeeCardList
+            profiles={filtered}
+            loading={loading}
+            currentProfileId={currentProfile?.id}
+            onApprove={confirmApprove}
+            onToggleRole={confirmToggleRole}
+            onRemove={confirmRemove}
           />
         </div>
       </div>

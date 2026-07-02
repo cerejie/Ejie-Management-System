@@ -15,24 +15,33 @@ export default defineConfig({
     vanillaExtractPlugin(),
     VitePWA({
       registerType: "autoUpdate",
-      includeAssets: ["favicon.svg"],
+      includeAssets: ["favicon.svg", "apple-touch-icon.png"],
       manifest: {
-        name: "Money Tracker",
-        short_name: "MoneyTracker",
+        name: "Ejie Layouts Monitoring",
+        short_name: "Ejie",
         description: "Internal sales & cash tracking system",
-        theme_color: "#1677ff",
+        theme_color: "#4F46E5",
         background_color: "#ffffff",
         display: "standalone",
+        orientation: "portrait-primary",
         icons: [
           {
             src: "pwa-192x192.png",
             sizes: "192x192",
             type: "image/png",
+            purpose: "any",
           },
           {
             src: "pwa-512x512.png",
             sizes: "512x512",
             type: "image/png",
+            purpose: "any",
+          },
+          {
+            src: "pwa-maskable-512x512.png",
+            sizes: "512x512",
+            type: "image/png",
+            purpose: "maskable",
           },
         ],
       },

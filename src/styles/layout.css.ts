@@ -1,11 +1,17 @@
 import { style } from "@vanilla-extract/css";
 import { vars } from "@/styles/theme.css";
+import { mobileDown } from "@/styles/breakpoints.css";
 
 export const page = style({
   padding: `${vars.space.xl} ${vars.space.xl} ${vars.space.xxl}`,
   maxWidth: 1180,
   margin: "0 auto",
   width: "100%",
+  "@media": {
+    [mobileDown]: {
+      padding: `${vars.space.md} ${vars.space.md} ${vars.space.xl}`,
+    },
+  },
 });
 
 export const pageHeader = style({
@@ -37,6 +43,40 @@ export const toolbar = style({
   flexWrap: "wrap",
   gap: vars.space.sm,
   marginBottom: vars.space.md,
+  "@media": {
+    [mobileDown]: {
+      flexDirection: "column",
+      alignItems: "stretch",
+    },
+  },
+});
+
+export const toolbarField = style({
+  maxWidth: 280,
+  "@media": {
+    [mobileDown]: {
+      maxWidth: "none",
+      width: "100%",
+    },
+  },
+});
+
+export const filterBarCentered = style({
+  marginBottom: vars.space.md,
+  "@media": {
+    [mobileDown]: {
+      display: "flex",
+      justifyContent: "center",
+    },
+  },
+});
+
+export const filterControl = style({
+  "@media": {
+    [mobileDown]: {
+      width: "auto",
+    },
+  },
 });
 
 export const card = style({
@@ -109,6 +149,38 @@ export const authFooterText = style({
   textAlign: "center",
   color: vars.color.textMuted,
   fontSize: 14,
+});
+
+export const desktopOnly = style({
+  "@media": {
+    [mobileDown]: {
+      display: "none",
+    },
+  },
+});
+
+export const fab = style({
+  display: "none",
+  "@media": {
+    [mobileDown]: {
+      display: "flex",
+    },
+  },
+  position: "fixed",
+  right: vars.space.lg,
+  bottom: `calc(64px + env(safe-area-inset-bottom) + ${vars.space.lg})`,
+  width: 56,
+  height: 56,
+  borderRadius: "50%",
+  background: vars.color.brand,
+  color: "#fff",
+  alignItems: "center",
+  justifyContent: "center",
+  fontSize: 22,
+  border: "none",
+  boxShadow: "0 8px 20px rgba(79, 70, 229, 0.4)",
+  zIndex: 101,
+  cursor: "pointer",
 });
 
 export const positiveAmount = style({
