@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
-import { Typography, message, Modal, DatePicker } from "antd";
+import { App, Typography, Modal, DatePicker, Input } from "antd";
+import { SearchOutlined } from "@ant-design/icons";
 import dayjs, { type Dayjs } from "dayjs";
 import { AppLayout } from "@/components/AppLayout";
 import { StatCardRow } from "@/components/StatCardRow";
@@ -13,16 +14,18 @@ import {
 } from "@/lib/api";
 import type { TransactionWithAuthor } from "@/types/database";
 import type { TransactionFormValues } from "@/schemas/transaction-schema";
-import { page } from "@/styles/layout.css";
+import { page, pageHeader, pageTitle, pageSubtitle, toolbar } from "@/styles/layout.css";
 
 const { RangePicker } = DatePicker;
 
 export function AdminDashboardPage() {
+  const { message } = App.useApp();
   const [transactions, setTransactions] = useState<TransactionWithAuthor[]>([]);
   const [loading, setLoading] = useState(true);
   const [editing, setEditing] = useState<TransactionWithAuthor | null>(null);
   const [saving, setSaving] = useState(false);
   const [dateRange, setDateRange] = useState<[Dayjs, Dayjs] | null>(null);
+  const [search, setSearch] = useState("");
 
   const load = useCallback(async () => {
     setLoading(true);
@@ -33,7 +36,7 @@ export function AdminDashboardPage() {
     } finally {
       setLoading(false);
     }
-  }, []);
+  }, [message]);
 
   useEffect(() => {
     load();
@@ -41,13 +44,23 @@ export function AdminDashboardPage() {
 
   // Already sorted latest-first by the API query; filtering preserves that order.
   const filtered = useMemo(() => {
-    if (!dateRange) return transactions;
-    const [start, end] = dateRange;
-    return transactions.filter((tx) => {
-      const created = dayjs(tx.created_at);
-      return created.isAfter(start.startOf("day")) && created.isBefore(end.endOf("day"));
-    });
-  }, [transactions, dateRange]);
+    let rows = transactions;
+    if (dateRange) {
+      const [start, end] = dateRange;
+      rows = rows.filter((tx) => {
+        const created = dayjs(tx.created_at);
+        return created.isAfter(start.startOf("day")) && created.isBefore(end.endOf("day"));
+      });
+    }
+    if (search.trim()) {
+      const q = search.trim().toLowerCase();
+      rows = rows.filter(
+        (tx) =>
+          tx.note?.toLowerCase().includes(q) || tx.profiles?.username?.toLowerCase().includes(q),
+      );
+    }
+    return rows;
+  }, [transactions, dateRange, search]);
 
   async function handleUpdate(values: TransactionFormValues) {
     if (!editing) return;
@@ -79,11 +92,26 @@ export function AdminDashboardPage() {
   return (
     <AppLayout>
       <div className={page}>
-        <Typography.Title level={3}>Dashboard</Typography.Title>
+        <div className={pageHeader}>
+          <div>
+            <Typography.Title level={3} className={pageTitle}>
+              Dashboard
+            </Typography.Title>
+            <p className={pageSubtitle}>Company-wide view of every recorded transaction.</p>
+          </div>
+        </div>
 
         <StatCardRow balanceLabel="Current balance" totalIn={totals.totalIn} totalOut={totals.totalOut} net={totals.net} />
 
-        <div style={{ margin: "24px 0 16px" }}>
+        <div className={toolbar} style={{ marginTop: 24 }}>
+          <Input
+            allowClear
+            placeholder="Search by note or employee"
+            prefix={<SearchOutlined style={{ color: "#9CA3AF" }} />}
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+            style={{ maxWidth: 280 }}
+          />
           <RangePicker
             value={dateRange}
             onChange={(value) => setDateRange(value && value[0] && value[1] ? [value[0], value[1]] : null)}

@@ -46,7 +46,7 @@ export function TransactionForm({
   }
 
   return (
-    <Form layout="vertical" onFinish={handleSubmit(submit)}>
+    <Form layout="vertical" requiredMark="optional" onFinish={handleSubmit(submit)}>
       <Form.Item label="Type" validateStatus={errors.type ? "error" : ""} help={errors.type?.message}>
         <Controller
           control={control}
@@ -54,6 +54,7 @@ export function TransactionForm({
           render={({ field }) => (
             <Segmented
               {...field}
+              block
               options={[
                 { label: "Money In", value: "deposit" },
                 { label: "Money Out", value: "deduction" },

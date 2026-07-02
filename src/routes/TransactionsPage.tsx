@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
-import { Typography, message, Row, Col, Modal, DatePicker } from "antd";
+import { App, Typography, Row, Col, Modal, DatePicker } from "antd";
 import dayjs, { type Dayjs } from "dayjs";
 import { AppLayout } from "@/components/AppLayout";
 import { TransactionForm } from "@/components/TransactionForm";
@@ -8,12 +8,13 @@ import { StatCardRow } from "@/components/StatCardRow";
 import { useAuthStore } from "@/store/auth-store";
 import { computeTotals, createTransaction, listOwnTransactions, updateTransaction } from "@/lib/api";
 import type { Transaction } from "@/types/database";
-import { page, card } from "@/styles/layout.css";
+import { page, pageHeader, pageTitle, pageSubtitle, card } from "@/styles/layout.css";
 import type { TransactionFormValues } from "@/schemas/transaction-schema";
 
 const { RangePicker } = DatePicker;
 
 export function TransactionsPage() {
+  const { message } = App.useApp();
   const profile = useAuthStore((s) => s.profile);
   const [transactions, setTransactions] = useState<Transaction[]>([]);
   const [loading, setLoading] = useState(true);
@@ -32,7 +33,7 @@ export function TransactionsPage() {
     } finally {
       setLoading(false);
     }
-  }, [profile]);
+  }, [profile, message]);
 
   useEffect(() => {
     load();
@@ -82,13 +83,20 @@ export function TransactionsPage() {
   return (
     <AppLayout>
       <div className={page}>
-        <Typography.Title level={3}>My Ledger</Typography.Title>
+        <div className={pageHeader}>
+          <div>
+            <Typography.Title level={3} className={pageTitle}>
+              My Ledger
+            </Typography.Title>
+            <p className={pageSubtitle}>Track the money you've recorded in and out.</p>
+          </div>
+        </div>
 
         <StatCardRow balanceLabel="My balance" totalIn={totals.totalIn} totalOut={totals.totalOut} net={totals.net} />
 
-        <Row gutter={24} style={{ marginTop: 24 }}>
+        <Row gutter={[24, 24]} style={{ marginTop: 24 }}>
           <Col xs={24} md={8}>
-            <div className={card}>
+            <div className={card} style={{ marginBottom: 0 }}>
               <Typography.Title level={5} style={{ marginTop: 0 }}>
                 Record an entry
               </Typography.Title>

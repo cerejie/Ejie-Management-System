@@ -11,4 +11,10 @@ globalStyle("body", {
   color: vars.color.text,
   fontFamily:
     "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif",
+  WebkitFontSmoothing: "antialiased",
+  MozOsxFontSmoothing: "grayscale",
+});
+
+globalStyle("*", {
+  boxSizing: "border-box",
 });
