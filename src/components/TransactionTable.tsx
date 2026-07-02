@@ -10,19 +10,19 @@ function hasAuthor(row: Row): row is TransactionWithAuthor {
   return "profiles" in row;
 }
 
-interface TransactionTableProps {
-  data: Row[];
+interface TransactionTableProps<T extends Row> {
+  data: T[];
   loading?: boolean;
-  onEdit?: (row: TransactionWithAuthor) => void;
-  onDelete?: (row: TransactionWithAuthor) => void;
+  onEdit?: (row: T) => void;
+  onDelete?: (row: T) => void;
 }
 
-export function TransactionTable({ data, loading, onEdit, onDelete }: TransactionTableProps) {
+export function TransactionTable<T extends Row>({ data, loading, onEdit, onDelete }: TransactionTableProps<T>) {
   const showAuthor = data.length > 0 && hasAuthor(data[0]);
   const showActions = Boolean(onEdit || onDelete);
 
   return (
-    <Table<Row>
+    <Table<T>
       rowKey="id"
       loading={loading}
       dataSource={data}
@@ -39,8 +39,7 @@ export function TransactionTable({ data, loading, onEdit, onDelete }: Transactio
               {
                 title: "Recorded by",
                 key: "author",
-                render: (_: unknown, row: Row) =>
-                  hasAuthor(row) ? row.profiles?.full_name ?? row.profiles?.email ?? "—" : "—",
+                render: (_: unknown, row: T) => (hasAuthor(row) ? row.profiles?.username ?? "—" : "—"),
               },
             ]
           : []),
@@ -58,7 +57,7 @@ export function TransactionTable({ data, loading, onEdit, onDelete }: Transactio
           title: "Amount",
           dataIndex: "amount",
           width: 140,
-          render: (value: number, row: Row) => (
+          render: (value: number, row: T) => (
             <span className={row.type === "deposit" ? positiveAmount : negativeAmount}>
               {row.type === "deposit" ? "+" : "-"}
               {value.toFixed(2)}
@@ -76,26 +75,16 @@ export function TransactionTable({ data, loading, onEdit, onDelete }: Transactio
                 title: "Actions",
                 key: "actions",
                 width: 120,
-                render: (_: unknown, row: Row) =>
-                  hasAuthor(row) ? (
-                    <Space>
-                      {onEdit && (
-                        <Button
-                          size="small"
-                          icon={<EditOutlined />}
-                          onClick={() => onEdit(row)}
-                        />
-                      )}
-                      {onDelete && (
-                        <Popconfirm
-                          title="Delete this entry?"
-                          onConfirm={() => onDelete(row)}
-                        >
-                          <Button size="small" danger icon={<DeleteOutlined />} />
-                        </Popconfirm>
-                      )}
-                    </Space>
-                  ) : null,
+                render: (_: unknown, row: T) => (
+                  <Space>
+                    {onEdit && <Button size="small" icon={<EditOutlined />} onClick={() => onEdit(row)} />}
+                    {onDelete && (
+                      <Popconfirm title="Delete this entry?" onConfirm={() => onDelete(row)}>
+                        <Button size="small" danger icon={<DeleteOutlined />} />
+                      </Popconfirm>
+                    )}
+                  </Space>
+                ),
               },
             ]
           : []),

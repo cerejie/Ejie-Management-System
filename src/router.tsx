@@ -5,6 +5,7 @@ import { RegisterPage } from "@/routes/RegisterPage";
 import { TransactionsPage } from "@/routes/TransactionsPage";
 import { AdminDashboardPage } from "@/routes/AdminDashboardPage";
 import { EmployeesPage } from "@/routes/EmployeesPage";
+import { LogsPage } from "@/routes/LogsPage";
 
 const rootRoute = createRootRoute({
   component: Outlet,
@@ -34,8 +35,8 @@ const indexRoute = createRoute({
   path: "/",
   beforeLoad: () => {
     requireAuth();
-    const isAdmin = useAuthStore.getState().profile?.role === "admin";
-    throw redirect({ to: isAdmin ? "/admin" : "/transactions" });
+    const profile = useAuthStore.getState().profile;
+    throw redirect({ to: profile?.role === "admin" ? "/admin" : "/transactions" });
   },
 });
 
@@ -74,6 +75,13 @@ const adminEmployeesRoute = createRoute({
   component: EmployeesPage,
 });
 
+const adminLogsRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: "/admin/logs",
+  beforeLoad: requireAdmin,
+  component: LogsPage,
+});
+
 const routeTree = rootRoute.addChildren([
   indexRoute,
   loginRoute,
@@ -81,6 +89,7 @@ const routeTree = rootRoute.addChildren([
   transactionsRoute,
   adminRoute,
   adminEmployeesRoute,
+  adminLogsRoute,
 ]);
 
 export const router = createRouter({ routeTree });
