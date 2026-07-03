@@ -46,7 +46,7 @@ export function TransactionTable<T extends Row>({ data, loading, onEdit, onDelet
         rowKey="id"
         loading={loading}
         dataSource={data}
-        pagination={{ pageSize: 10, showTotal: (total) => `${total} entries` }}
+        pagination={{ pageSize: 5, showTotal: (total) => `${total} entries` }}
         scroll={{ x: 720 }}
         sticky
         locale={{

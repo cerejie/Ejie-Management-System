@@ -2,6 +2,12 @@ import { style } from "@vanilla-extract/css";
 import { vars } from "@/styles/theme.css";
 import { mobileDown } from "@/styles/breakpoints.css";
 
+export const NAV_ITEM_SIZE = 48;
+export const NAV_ITEM_GAP = 6;
+export const NAV_PADDING = 6;
+export const NAV_BOTTOM_MARGIN = 14;
+export const NAV_PILL_HEIGHT = NAV_ITEM_SIZE + NAV_PADDING * 2;
+
 export const bar = style({
   display: "none",
   "@media": {
@@ -10,30 +16,47 @@ export const bar = style({
     },
   },
   position: "fixed",
-  left: 0,
-  right: 0,
-  bottom: 0,
+  left: "50%",
+  bottom: `calc(${NAV_BOTTOM_MARGIN}px + env(safe-area-inset-bottom))`,
+  transform: "translateX(-50%)",
   zIndex: 100,
-  alignItems: "stretch",
-  justifyContent: "space-around",
+  padding: NAV_PADDING,
+  borderRadius: 999,
   background: vars.color.surface,
-  borderTop: `1px solid ${vars.color.border}`,
-  boxShadow: "0 -4px 16px rgba(16, 24, 40, 0.06)",
-  paddingBottom: "env(safe-area-inset-bottom)",
+  border: `1px solid ${vars.color.border}`,
+  boxShadow: "0 8px 24px rgba(16, 24, 40, 0.14)",
+});
+
+export const track = style({
+  position: "relative",
+  display: "flex",
+  alignItems: "center",
+  gap: NAV_ITEM_GAP,
+});
+
+export const indicator = style({
+  position: "absolute",
+  top: 0,
+  left: 0,
+  width: NAV_ITEM_SIZE,
+  height: NAV_ITEM_SIZE,
+  borderRadius: vars.radius.lg,
+  background: vars.color.brand,
+  transition: "transform 0.35s cubic-bezier(0.4, 0, 0.2, 1)",
+  willChange: "transform",
 });
 
 export const item = style({
-  flex: 1,
+  position: "relative",
+  zIndex: 1,
+  width: NAV_ITEM_SIZE,
+  height: NAV_ITEM_SIZE,
   display: "flex",
-  flexDirection: "column",
   alignItems: "center",
   justifyContent: "center",
-  gap: 2,
-  padding: "8px 4px 6px",
   color: vars.color.textFaint,
-  fontSize: 11,
-  fontWeight: 500,
   textDecoration: "none",
+  transition: "color 0.25s ease",
   selectors: {
     "&:hover": {
       color: vars.color.textFaint,
@@ -42,10 +65,10 @@ export const item = style({
 });
 
 export const itemActive = style({
-  color: vars.color.brand,
+  color: "#fff",
   selectors: {
     "&:hover": {
-      color: vars.color.brand,
+      color: "#fff",
     },
   },
 });

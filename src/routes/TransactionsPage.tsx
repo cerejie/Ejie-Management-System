@@ -2,7 +2,6 @@ import { useCallback, useEffect, useMemo, useState } from "react";
 import { App, Typography, Row, Col, Modal, DatePicker } from "antd";
 import { PlusOutlined } from "@ant-design/icons";
 import dayjs, { type Dayjs } from "dayjs";
-import { AppLayout } from "@/components/AppLayout";
 import { TransactionForm } from "@/components/TransactionForm";
 import { TransactionTable } from "@/components/TransactionTable";
 import { StatCardRow } from "@/components/StatCardRow";
@@ -84,7 +83,7 @@ export function TransactionsPage() {
   }
 
   return (
-    <AppLayout>
+    <>
       <div className={page}>
         <div className={pageHeader}>
           <div>
@@ -142,6 +141,6 @@ export function TransactionsPage() {
           />
         )}
       </Modal>
-    </AppLayout>
+    </>
   );
 }

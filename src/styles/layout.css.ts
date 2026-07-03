@@ -1,6 +1,7 @@
 import { style } from "@vanilla-extract/css";
 import { vars } from "@/styles/theme.css";
 import { mobileDown } from "@/styles/breakpoints.css";
+import { NAV_PILL_HEIGHT, NAV_BOTTOM_MARGIN } from "@/styles/bottomNav.css";
 
 export const page = style({
   padding: `${vars.space.xl} ${vars.space.xl} ${vars.space.xxl}`,
@@ -168,7 +169,7 @@ export const fab = style({
   },
   position: "fixed",
   right: vars.space.lg,
-  bottom: `calc(64px + env(safe-area-inset-bottom) + ${vars.space.lg})`,
+  bottom: `calc(${NAV_PILL_HEIGHT + NAV_BOTTOM_MARGIN}px + env(safe-area-inset-bottom) + ${vars.space.lg})`,
   width: 56,
   height: 56,
   borderRadius: "50%",

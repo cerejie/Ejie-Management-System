@@ -2,7 +2,6 @@ import { useCallback, useEffect, useMemo, useState } from "react";
 import { App, Typography, Table, Tag, Input, Empty } from "antd";
 import { SearchOutlined, FileTextOutlined } from "@ant-design/icons";
 import dayjs from "dayjs";
-import { AppLayout } from "@/components/AppLayout";
 import { LogCardList } from "@/components/LogCardList";
 import { listActivityLogs } from "@/lib/api";
 import type { ActivityLogWithActor } from "@/types/database";
@@ -73,7 +72,7 @@ export function LogsPage() {
   }, [logs, search]);
 
   return (
-    <AppLayout>
+    <>
       <div className={page}>
         <div className={pageHeader}>
           <div>
@@ -101,7 +100,7 @@ export function LogsPage() {
             rowKey="id"
             loading={loading}
             dataSource={filtered}
-            pagination={{ pageSize: 20, showTotal: (total) => `${total} events` }}
+            pagination={{ pageSize: 6, showTotal: (total) => `${total} events` }}
             scroll={{ x: 760 }}
             sticky
             locale={{
@@ -147,6 +146,6 @@ export function LogsPage() {
           <LogCardList logs={filtered} loading={loading} actionColors={actionColors} describe={describe} />
         </div>
       </div>
-    </AppLayout>
+    </>
   );
 }

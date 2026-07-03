@@ -2,7 +2,6 @@ import { useCallback, useEffect, useMemo, useState } from "react";
 import { App, Typography, Modal, DatePicker, Input } from "antd";
 import { SearchOutlined } from "@ant-design/icons";
 import dayjs, { type Dayjs } from "dayjs";
-import { AppLayout } from "@/components/AppLayout";
 import { StatCardRow } from "@/components/StatCardRow";
 import { TransactionForm } from "@/components/TransactionForm";
 import { TransactionTable } from "@/components/TransactionTable";
@@ -90,7 +89,7 @@ export function AdminDashboardPage() {
   const totals = computeTotals(filtered);
 
   return (
-    <AppLayout>
+    <>
       <div className={page}>
         <div className={pageHeader}>
           <div>
@@ -143,6 +142,6 @@ export function AdminDashboardPage() {
           />
         )}
       </Modal>
-    </AppLayout>
+    </>
   );
 }
