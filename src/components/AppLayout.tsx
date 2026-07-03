@@ -5,7 +5,6 @@ import {
   LogoutOutlined,
   MenuFoldOutlined,
   MenuUnfoldOutlined,
-  DownOutlined,
 } from "@ant-design/icons";
 import { Link, useNavigate, useRouterState } from "@tanstack/react-router";
 import { useAuthStore } from "@/store/auth-store";
@@ -16,6 +15,13 @@ import {
   sidebarBrand,
   sidebarBrandMark,
   sidebarBrandText,
+  sidebarInner,
+  sidebarMenu,
+  sidebarFooter,
+  sidebarUserTrigger,
+  sidebarUserMeta,
+  sidebarUserName,
+  sidebarUserRole,
   header,
   headerLeft,
   headerTitle,
@@ -89,11 +95,33 @@ export function AppLayout({ children }: { children: React.ReactNode }) {
         width={232}
         trigger={null}
       >
-        <div className={sidebarBrand}>
-          <div className={sidebarBrandMark}>EJ</div>
-          <span className={sidebarBrandText}>Ejie Layouts Monitoring </span>
+        <div className={sidebarInner}>
+          <div className={sidebarBrand}>
+            <div className={sidebarBrandMark}>EJ</div>
+            <span className={sidebarBrandText}>Ejie Layouts Monitoring </span>
+          </div>
+          <Menu className={sidebarMenu} theme="dark" mode="inline" selectedKeys={[pathname]} items={items} />
+          <div className={sidebarFooter}>
+            <Dropdown menu={{ items: userMenuItems }} trigger={["click"]} placement="topRight">
+              <div className={sidebarUserTrigger}>
+                <Avatar style={{ backgroundColor: "#4F46E5" }}>
+                  {profile?.username?.[0]?.toUpperCase() ?? "?"}
+                </Avatar>
+                <div className={sidebarUserMeta}>
+                  <span className={sidebarUserName}>{profile?.username}</span>
+                  <span className={sidebarUserRole}>
+                    <Tag
+                      color={isAdmin ? "gold" : "blue"}
+                      style={{ marginInlineEnd: 0, lineHeight: "16px", fontSize: 11, padding: "0 6px" }}
+                    >
+                      {profile?.role}
+                    </Tag>
+                  </span>
+                </div>
+              </div>
+            </Dropdown>
+          </div>
         </div>
-        <Menu theme="dark" mode="inline" selectedKeys={[pathname]} items={items} />
       </Sider>
       <Layout>
         <Header className={header}>
@@ -123,7 +151,6 @@ export function AppLayout({ children }: { children: React.ReactNode }) {
                   </Tag>
                 </span>
               </div>
-              <DownOutlined style={{ fontSize: 10, color: "#9CA3AF" }} />
             </div>
           </Dropdown>
         </Header>

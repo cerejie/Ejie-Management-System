@@ -43,12 +43,73 @@ export const sidebarBrandText = style({
   textOverflow: "ellipsis",
 });
 
+export const sidebarInner = style({
+  display: "flex",
+  flexDirection: "column",
+  height: "100%",
+});
+
+export const sidebarMenu = style({
+  flex: 1,
+  overflowY: "auto",
+});
+
+export const sidebarFooter = style({
+  flexShrink: 0,
+  borderTop: `1px solid ${vars.color.sidebarBorder}`,
+  padding: "12px 16px",
+});
+
+export const sidebarUserTrigger = style({
+  display: "flex",
+  alignItems: "center",
+  gap: 8,
+  padding: 6,
+  borderRadius: vars.radius.md,
+  cursor: "pointer",
+  transition: "background-color 0.15s ease",
+  selectors: {
+    "&:hover": {
+      backgroundColor: vars.color.sidebarBgHover,
+    },
+  },
+});
+
+export const sidebarUserMeta = style({
+  display: "flex",
+  flexDirection: "column",
+  lineHeight: 1.3,
+  minWidth: 0,
+});
+
+export const sidebarUserName = style({
+  fontSize: 13,
+  fontWeight: 600,
+  color: vars.color.sidebarTextActive,
+  whiteSpace: "nowrap",
+  overflow: "hidden",
+  textOverflow: "ellipsis",
+});
+
+export const sidebarUserRole = style({
+  fontSize: 12,
+  color: vars.color.sidebarText,
+  textTransform: "capitalize",
+});
+
 export const header = style({
   display: "flex",
   alignItems: "center",
   justifyContent: "space-between",
   gap: vars.space.md,
   borderBottom: `1px solid ${vars.color.border}`,
+  boxSizing: "border-box",
+  "@media": {
+    [mobileDown]: {
+      height: "calc(64px + env(safe-area-inset-top))",
+      paddingTop: "env(safe-area-inset-top)",
+    },
+  },
 });
 
 export const headerLeft = style({
@@ -81,7 +142,7 @@ export const collapseTrigger = style({
 });
 
 export const userTrigger = style({
-  display: "flex",
+  display: "none",
   alignItems: "center",
   gap: 8,
   padding: "6px 10px 6px 6px",
@@ -91,6 +152,11 @@ export const userTrigger = style({
   selectors: {
     "&:hover": {
       backgroundColor: vars.color.surfaceHover,
+    },
+  },
+  "@media": {
+    [mobileDown]: {
+      display: "flex",
     },
   },
 });
@@ -122,6 +188,7 @@ export const contentOuter = style({
   minHeight: "calc(100vh - 64px)",
   "@media": {
     [mobileDown]: {
+      minHeight: "calc(100vh - 64px - env(safe-area-inset-top))",
       paddingBottom: "calc(64px + env(safe-area-inset-bottom))",
     },
   },
