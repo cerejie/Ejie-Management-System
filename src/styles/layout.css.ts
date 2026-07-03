@@ -196,6 +196,14 @@ export const negativeAmount = style({
 
 export const segmentedTypeControl = style({});
 
+globalStyle(`${segmentedTypeControl} .ant-segmented-thumb`, {
+  transition:
+    "background-color 0.2s ease, transform 0.1s cubic-bezier(0.645, 0.045, 0.355, 1), width 0.3s cubic-bezier(0.645, 0.045, 0.355, 1)",
+});
+
+globalStyle(`${segmentedTypeControl}.deposit .ant-segmented-thumb`, {
+  backgroundColor: vars.color.positiveHard,
+});
 globalStyle(`${segmentedTypeControl}.deposit .ant-segmented-item-selected`, {
   backgroundColor: vars.color.positiveHard,
   boxShadow: "none",
@@ -203,6 +211,9 @@ globalStyle(`${segmentedTypeControl}.deposit .ant-segmented-item-selected`, {
 globalStyle(`${segmentedTypeControl}.deposit .ant-segmented-item-selected .ant-segmented-item-label`, {
   color: vars.color.brandSoft,
   fontWeight: 600,
+});
+globalStyle(`${segmentedTypeControl}.deduction .ant-segmented-thumb`, {
+  backgroundColor: vars.color.negativeHard,
 });
 globalStyle(`${segmentedTypeControl}.deduction .ant-segmented-item-selected`, {
   backgroundColor: vars.color.negativeHard,
