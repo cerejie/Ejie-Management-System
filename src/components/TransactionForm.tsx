@@ -6,6 +6,7 @@ import {
   transactionSchema,
   type TransactionFormValues,
 } from "@/schemas/transaction-schema";
+import { segmentedTypeControl } from "@/styles/layout.css";
 
 interface TransactionFormProps {
   initialValues?: TransactionFormValues;
@@ -55,6 +56,7 @@ export function TransactionForm({
             <Segmented
               {...field}
               block
+              className={`${segmentedTypeControl} ${field.value === "deposit" ? "deposit" : "deduction"}`}
               options={[
                 { label: "Money In", value: "deposit" },
                 { label: "Money Out", value: "deduction" },

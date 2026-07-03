@@ -1,4 +1,4 @@
-import { style } from "@vanilla-extract/css";
+import { style, globalStyle } from "@vanilla-extract/css";
 import { vars } from "@/styles/theme.css";
 import { mobileDown } from "@/styles/breakpoints.css";
 import { NAV_PILL_HEIGHT, NAV_BOTTOM_MARGIN } from "@/styles/bottomNav.css";
@@ -191,5 +191,24 @@ export const positiveAmount = style({
 
 export const negativeAmount = style({
   color: vars.color.negative,
+  fontWeight: 600,
+});
+
+export const segmentedTypeControl = style({});
+
+globalStyle(`${segmentedTypeControl}.deposit .ant-segmented-item-selected`, {
+  backgroundColor: vars.color.positiveHard,
+  boxShadow: "none",
+});
+globalStyle(`${segmentedTypeControl}.deposit .ant-segmented-item-selected .ant-segmented-item-label`, {
+  color: vars.color.brandSoft,
+  fontWeight: 600,
+});
+globalStyle(`${segmentedTypeControl}.deduction .ant-segmented-item-selected`, {
+  backgroundColor: vars.color.negativeHard,
+  boxShadow: "none",
+});
+globalStyle(`${segmentedTypeControl}.deduction .ant-segmented-item-selected .ant-segmented-item-label`, {
+  color: vars.color.brandSoft,
   fontWeight: 600,
 });
