@@ -1,6 +1,7 @@
-import { style } from "@vanilla-extract/css";
+import { style, globalStyle } from "@vanilla-extract/css";
 import { vars } from "@/styles/theme.css";
 import { mobileDown } from "@/styles/breakpoints.css";
+import { NAV_PILL_HEIGHT, NAV_BOTTOM_MARGIN } from "@/styles/bottomNav.css";
 
 export const page = style({
   padding: `${vars.space.xl} ${vars.space.xl} ${vars.space.xxl}`,
@@ -75,6 +76,54 @@ export const filterControl = style({
   "@media": {
     [mobileDown]: {
       width: "auto",
+    },
+  },
+});
+
+// Applied to the RangePicker's popup (classNames.popup.root) so the two
+// month panels stack instead of sitting side by side, which is what
+// overflows small screens and forces the dropdown off-viewport.
+export const rangePickerPopup = style({});
+
+globalStyle(`${rangePickerPopup}.ant-picker-dropdown`, {
+  "@media": {
+    [mobileDown]: {
+      maxWidth: "calc(100vw - 16px)",
+      // The popup is positioned by JS relative to the (centered) input, which
+      // leaves it off-center on narrow screens. Recenter it on the viewport;
+      // `!important` is needed to beat the inline left/top rc-trigger sets.
+      left: "50% !important",
+      // antd's enter animation also drives `transform` inline (scale), which
+      // would otherwise clobber the translate needed to center the popup.
+      transform: "translateX(-50%) !important",
+    },
+  },
+});
+
+globalStyle(`${rangePickerPopup} .ant-picker-range-wrapper`, {
+  "@media": {
+    [mobileDown]: {
+      maxWidth: "100%",
+    },
+  },
+});
+
+globalStyle(`${rangePickerPopup} .ant-picker-range-arrow`, {
+  "@media": {
+    [mobileDown]: {
+      // The arrow points at the input's original anchor point, which no
+      // longer lines up once the popup is recentered.
+      display: "none",
+    },
+  },
+});
+
+globalStyle(`${rangePickerPopup} .ant-picker-panels`, {
+  "@media": {
+    [mobileDown]: {
+      flexDirection: "column",
+      maxHeight: "60vh",
+      overflowY: "auto",
     },
   },
 });
@@ -168,7 +217,7 @@ export const fab = style({
   },
   position: "fixed",
   right: vars.space.lg,
-  bottom: `calc(64px + env(safe-area-inset-bottom) + ${vars.space.lg})`,
+  bottom: `calc(${NAV_PILL_HEIGHT + NAV_BOTTOM_MARGIN}px + env(safe-area-inset-bottom) + ${vars.space.lg})`,
   width: 56,
   height: 56,
   borderRadius: "50%",
@@ -190,5 +239,35 @@ export const positiveAmount = style({
 
 export const negativeAmount = style({
   color: vars.color.negative,
+  fontWeight: 600,
+});
+
+export const segmentedTypeControl = style({});
+
+globalStyle(`${segmentedTypeControl} .ant-segmented-thumb`, {
+  transition:
+    "background-color 0.2s ease, transform 0.1s cubic-bezier(0.645, 0.045, 0.355, 1), width 0.3s cubic-bezier(0.645, 0.045, 0.355, 1)",
+});
+
+globalStyle(`${segmentedTypeControl}.deposit .ant-segmented-thumb`, {
+  backgroundColor: vars.color.positiveHard,
+});
+globalStyle(`${segmentedTypeControl}.deposit .ant-segmented-item-selected`, {
+  backgroundColor: vars.color.positiveHard,
+  boxShadow: "none",
+});
+globalStyle(`${segmentedTypeControl}.deposit .ant-segmented-item-selected .ant-segmented-item-label`, {
+  color: vars.color.brandSoft,
+  fontWeight: 600,
+});
+globalStyle(`${segmentedTypeControl}.deduction .ant-segmented-thumb`, {
+  backgroundColor: vars.color.negativeHard,
+});
+globalStyle(`${segmentedTypeControl}.deduction .ant-segmented-item-selected`, {
+  backgroundColor: vars.color.negativeHard,
+  boxShadow: "none",
+});
+globalStyle(`${segmentedTypeControl}.deduction .ant-segmented-item-selected .ant-segmented-item-label`, {
+  color: vars.color.brandSoft,
   fontWeight: 600,
 });

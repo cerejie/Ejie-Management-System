@@ -2,14 +2,24 @@ import { useCallback, useEffect, useMemo, useState } from "react";
 import { App, Typography, Row, Col, Modal, DatePicker } from "antd";
 import { PlusOutlined } from "@ant-design/icons";
 import dayjs, { type Dayjs } from "dayjs";
-import { AppLayout } from "@/components/AppLayout";
 import { TransactionForm } from "@/components/TransactionForm";
 import { TransactionTable } from "@/components/TransactionTable";
 import { StatCardRow } from "@/components/StatCardRow";
 import { useAuthStore } from "@/store/auth-store";
 import { computeTotals, createTransaction, listOwnTransactions, updateTransaction } from "@/lib/api";
 import type { Transaction } from "@/types/database";
-import { page, pageHeader, pageTitle, pageSubtitle, card, desktopOnly, fab, filterBarCentered, filterControl } from "@/styles/layout.css";
+import {
+  page,
+  pageHeader,
+  pageTitle,
+  pageSubtitle,
+  card,
+  desktopOnly,
+  fab,
+  filterBarCentered,
+  filterControl,
+  rangePickerPopup,
+} from "@/styles/layout.css";
 import type { TransactionFormValues } from "@/schemas/transaction-schema";
 
 const { RangePicker } = DatePicker;
@@ -84,7 +94,7 @@ export function TransactionsPage() {
   }
 
   return (
-    <AppLayout>
+    <>
       <div className={page}>
         <div className={pageHeader}>
           <div>
@@ -110,9 +120,11 @@ export function TransactionsPage() {
             <div className={filterBarCentered}>
               <RangePicker
                 className={filterControl}
+                classNames={{ popup: { root: rangePickerPopup } }}
                 value={dateRange}
                 onChange={(value) => setDateRange(value && value[0] && value[1] ? [value[0], value[1]] : null)}
                 allowClear
+                inputReadOnly
               />
             </div>
             <TransactionTable data={filtered} loading={loading} onEdit={setEditing} />
@@ -142,6 +154,6 @@ export function TransactionsPage() {
           />
         )}
       </Modal>
-    </AppLayout>
+    </>
   );
 }

@@ -6,6 +6,7 @@ import {
   transactionSchema,
   type TransactionFormValues,
 } from "@/schemas/transaction-schema";
+import { segmentedTypeControl } from "@/styles/layout.css";
 
 interface TransactionFormProps {
   initialValues?: TransactionFormValues;
@@ -16,7 +17,7 @@ interface TransactionFormProps {
 
 const defaultValues: TransactionFormValues = {
   type: "deposit",
-  amount: 0,
+  amount: undefined as unknown as number,
   note: "",
 };
 
@@ -55,6 +56,7 @@ export function TransactionForm({
             <Segmented
               {...field}
               block
+              className={`${segmentedTypeControl} ${field.value === "deposit" ? "deposit" : "deduction"}`}
               options={[
                 { label: "Money In", value: "deposit" },
                 { label: "Money Out", value: "deduction" },
@@ -74,7 +76,15 @@ export function TransactionForm({
               min={0}
               step={0.01}
               precision={2}
+              placeholder="0.00"
               style={{ width: "100%" }}
+              formatter={(value, info) => {
+                // antd passes "" (not undefined) for an empty field despite its number-only type
+                const raw = value as number | string | undefined;
+                if (raw === undefined || raw === null || raw === "") return "";
+                return info.userTyping ? String(raw) : Number(raw).toFixed(2);
+              }}
+              onPressEnter={(e) => (e.currentTarget as HTMLInputElement).blur()}
             />
           )}
         />

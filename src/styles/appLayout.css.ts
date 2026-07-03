@@ -1,6 +1,7 @@
 import { style } from "@vanilla-extract/css";
 import { vars } from "@/styles/theme.css";
 import { mobileDown, tabletDown } from "@/styles/breakpoints.css";
+import { NAV_PILL_HEIGHT, NAV_BOTTOM_MARGIN } from "@/styles/bottomNav.css";
 
 export const sider = style({
   borderRight: `1px solid ${vars.color.sidebarBorder}`,
@@ -189,7 +190,7 @@ export const contentOuter = style({
   "@media": {
     [mobileDown]: {
       minHeight: "calc(100vh - 64px - env(safe-area-inset-top))",
-      paddingBottom: "calc(64px + env(safe-area-inset-bottom))",
+      paddingBottom: `calc(${NAV_PILL_HEIGHT + NAV_BOTTOM_MARGIN + 16}px + env(safe-area-inset-bottom))`,
     },
   },
 });

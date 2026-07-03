@@ -5,7 +5,6 @@ import { PlusOutlined, SearchOutlined, MoreOutlined, UserAddOutlined } from "@an
 import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import dayjs from "dayjs";
-import { AppLayout } from "@/components/AppLayout";
 import { EmployeeCardList } from "@/components/EmployeeCardList";
 import { useAuthStore } from "@/store/auth-store";
 import {
@@ -182,7 +181,7 @@ export function EmployeesPage() {
   }
 
   return (
-    <AppLayout>
+    <>
       <div className={page}>
         <div className={pageHeader}>
           <div>
@@ -213,7 +212,7 @@ export function EmployeesPage() {
             rowKey="id"
             loading={loading}
             dataSource={filtered}
-            pagination={false}
+            pagination={{ pageSize: 6, showTotal: (total) => `${total} employees` }}
             scroll={{ x: 720 }}
             locale={{
               emptyText: (
@@ -301,6 +300,6 @@ export function EmployeesPage() {
       </div>
 
       <AddEmployeeModal open={addOpen} onClose={() => setAddOpen(false)} onCreated={load} />
-    </AppLayout>
+    </>
   );
 }

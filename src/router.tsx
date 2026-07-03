@@ -1,5 +1,6 @@
 import { createRootRoute, createRoute, createRouter, redirect, Outlet } from "@tanstack/react-router";
 import { useAuthStore } from "@/store/auth-store";
+import { AppLayout } from "@/components/AppLayout";
 import { LoginPage } from "@/routes/LoginPage";
 import { RegisterPage } from "@/routes/RegisterPage";
 import { TransactionsPage } from "@/routes/TransactionsPage";
@@ -54,29 +55,39 @@ const registerRoute = createRoute({
   component: RegisterPage,
 });
 
-const transactionsRoute = createRoute({
+const appLayoutRoute = createRoute({
   getParentRoute: () => rootRoute,
+  id: "app-layout",
+  component: () => (
+    <AppLayout>
+      <Outlet />
+    </AppLayout>
+  ),
+});
+
+const transactionsRoute = createRoute({
+  getParentRoute: () => appLayoutRoute,
   path: "/transactions",
   beforeLoad: requireAuth,
   component: TransactionsPage,
 });
 
 const adminRoute = createRoute({
-  getParentRoute: () => rootRoute,
+  getParentRoute: () => appLayoutRoute,
   path: "/admin",
   beforeLoad: requireAdmin,
   component: AdminDashboardPage,
 });
 
 const adminEmployeesRoute = createRoute({
-  getParentRoute: () => rootRoute,
+  getParentRoute: () => appLayoutRoute,
   path: "/admin/employees",
   beforeLoad: requireAdmin,
   component: EmployeesPage,
 });
 
 const adminLogsRoute = createRoute({
-  getParentRoute: () => rootRoute,
+  getParentRoute: () => appLayoutRoute,
   path: "/admin/logs",
   beforeLoad: requireAdmin,
   component: LogsPage,
@@ -86,10 +97,7 @@ const routeTree = rootRoute.addChildren([
   indexRoute,
   loginRoute,
   registerRoute,
-  transactionsRoute,
-  adminRoute,
-  adminEmployeesRoute,
-  adminLogsRoute,
+  appLayoutRoute.addChildren([transactionsRoute, adminRoute, adminEmployeesRoute, adminLogsRoute]),
 ]);
 
 export const router = createRouter({ routeTree });
