@@ -13,7 +13,7 @@ import {
 } from "@/lib/api";
 import type { TransactionWithAuthor } from "@/types/database";
 import type { TransactionFormValues } from "@/schemas/transaction-schema";
-import { page, pageHeader, pageTitle, pageSubtitle, toolbar, toolbarField } from "@/styles/layout.css";
+import { page, pageHeader, pageTitle, pageSubtitle, toolbar, toolbarField, rangePickerPopup } from "@/styles/layout.css";
 
 const { RangePicker } = DatePicker;
 
@@ -113,9 +113,11 @@ export function AdminDashboardPage() {
           />
           <RangePicker
             className={toolbarField}
+            classNames={{ popup: { root: rangePickerPopup } }}
             value={dateRange}
             onChange={(value) => setDateRange(value && value[0] && value[1] ? [value[0], value[1]] : null)}
             allowClear
+            inputReadOnly
           />
         </div>
 

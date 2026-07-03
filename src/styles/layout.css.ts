@@ -80,6 +80,54 @@ export const filterControl = style({
   },
 });
 
+// Applied to the RangePicker's popup (classNames.popup.root) so the two
+// month panels stack instead of sitting side by side, which is what
+// overflows small screens and forces the dropdown off-viewport.
+export const rangePickerPopup = style({});
+
+globalStyle(`${rangePickerPopup}.ant-picker-dropdown`, {
+  "@media": {
+    [mobileDown]: {
+      maxWidth: "calc(100vw - 16px)",
+      // The popup is positioned by JS relative to the (centered) input, which
+      // leaves it off-center on narrow screens. Recenter it on the viewport;
+      // `!important` is needed to beat the inline left/top rc-trigger sets.
+      left: "50% !important",
+      // antd's enter animation also drives `transform` inline (scale), which
+      // would otherwise clobber the translate needed to center the popup.
+      transform: "translateX(-50%) !important",
+    },
+  },
+});
+
+globalStyle(`${rangePickerPopup} .ant-picker-range-wrapper`, {
+  "@media": {
+    [mobileDown]: {
+      maxWidth: "100%",
+    },
+  },
+});
+
+globalStyle(`${rangePickerPopup} .ant-picker-range-arrow`, {
+  "@media": {
+    [mobileDown]: {
+      // The arrow points at the input's original anchor point, which no
+      // longer lines up once the popup is recentered.
+      display: "none",
+    },
+  },
+});
+
+globalStyle(`${rangePickerPopup} .ant-picker-panels`, {
+  "@media": {
+    [mobileDown]: {
+      flexDirection: "column",
+      maxHeight: "60vh",
+      overflowY: "auto",
+    },
+  },
+});
+
 export const card = style({
   background: vars.color.surface,
   border: `1px solid ${vars.color.border}`,
